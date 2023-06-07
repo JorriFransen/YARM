@@ -914,17 +914,23 @@ function resmon.update_ui(player)
     column_alignments[9] = 'left'  -- buttons
 
     local site_filter = resmon.filters[player_data.active_filter] or resmon.filters[FILTER_NONE]
-    local summary = resmon.generate_summaries(force_data, player)
-    local render_separator
-    for summary_site in sites_in_player_order(summary, player) do
-        if resmon.print_single_site(site_filter, summary_site, player, sites_gui, player_data)
-        then
-            render_separator = 1
+
+
+    if settings.global['YARM-show-summary'].value then
+        local render_separator
+        local summary = resmon.generate_summaries(force_data, player)
+        for summary_site in sites_in_player_order(summary, player) do
+            if resmon.print_single_site(site_filter, summary_site, player, sites_gui, player_data)
+            then
+                render_separator = 1
+            end
+        end
+
+        if render_separator then
+            for _ = 1, column_count do sites_gui.add { type = "label" }.style.maximal_height = 6 end
         end
     end
-    if render_separator then
-        for _ = 1, column_count do sites_gui.add { type = "label" }.style.maximal_height = 6 end
-    end
+
     for site in sites_in_player_order(force_data.ore_sites, player) do
         resmon.print_single_site(site_filter, site, player, sites_gui, player_data)
     end
