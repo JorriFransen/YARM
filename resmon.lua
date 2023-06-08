@@ -920,9 +920,9 @@ function resmon.update_ui(player)
 
     local site_filter = resmon.filters[player_data.active_filter] or resmon.filters[FILTER_NONE]
 
-    local summary = resmon.generate_summaries(force_data, player)
     local row = 1
     if settings.global['YARM-show-summary'].value then
+      local summary = resmon.generate_summaries(force_data, player)
       local render_separator
       for summary_site in sites_in_player_order(summary, player) do
           if resmon.print_single_site(site_filter, summary_site, player, sites_gui, player_data, row, column_count)
@@ -1022,7 +1022,10 @@ end
 function resmon.print_single_site(site_filter, site, player, sites_gui, player_data, row, column_count)
     if not site_filter(site, player) then return end
 
-    local caption = row ~= 1 and "" or { "YARM-category-" .. (site.is_summary and "totals" or "sites") }
+    local caption = ""
+    if row == 1 and settings.global['YARM-show-summary'].value then
+        caption = { "YARM-category-" .. (site.is_summary and "totals" or "sites") }
+    end
     sites_gui.add { type = "label", caption = caption }
 
     -- TODO: This shouldn't be part of printing the site! It cancels the deletion
