@@ -88,6 +88,13 @@ data:extend({
         order = "g",
         default_value = "false",
     },
+    {
+        type = "bool-setting",
+        name = "YARM-show-summary",
+        setting_type = "runtime-global",
+        order = "h",
+        default_value = "true",
+    },
 
     -- Per user settings
     {
